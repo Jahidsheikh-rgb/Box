@@ -1,0 +1,47 @@
+[
+  {
+    "id": 1,
+    "title": "Broken Road near Main Gate",
+    "description": "Large pothole near the main gate causing accidents for bikes and cars.",
+    "department": "Infrastructure",
+    "image": "https://images.unsplash.com/photo-1581092160562-40aa08e78837",
+    "author": "Student A",
+    "date": "2025-01-01"
+  },
+  {
+    "id": 2,
+    "title": "Street Light Not Working",
+    "description": "Street light in front of academic building flickers and turns off at night.",
+    "department": "Electrical",
+    "image": "https://images.unsplash.com/photo-1509223197845-458d87318791",
+    "author": "Student B",
+    "date": "2025-01-02"
+  },
+  {
+    "id": 3,
+    "title": "WiFi Connectivity Issue",
+    "description": "Very slow internet speed in computer lab during class hours.",
+    "department": "IT Support",
+    "image": "https://images.unsplash.com/photo-1518770660439-4636190af475",
+    "author": "Student C",
+    "date": "2025-01-03"
+  },
+  {
+    "id": 4,
+    "title": "Hostel Water Supply Problem",
+    "description": "Irregular water supply in boys hostel since last week.",
+    "department": "Hostel",
+    "image": "https://images.unsplash.com/photo-1560518883-ce09059eeffa",
+    "author": "Student D",
+    "date": "2025-01-04"
+  },
+  {
+    "id": 5,
+    "title": "Delay in Certificate Issuance",
+    "description": "Applied for academic certificate but no update for over a month.",
+    "department": "Administration",
+    "image": "https://images.unsplash.com/photo-1521791136064-7986c2920216",
+    "author": "Student E",
+    "date": "2025-01-05"
+  }
+]
