@@ -1,48 +1,75 @@
 import { useForm } from "react-hook-form";
 import { FaGoogle, FaFacebookF } from "react-icons/fa";
-import img from "../assets/image.png"
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import img from "../assets/image.png";
 
 const Register = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log("Form Data:", data);
+  const onSubmit = async (data) => {
+    try {
+      // Role logic: checkbox = authority, else user
+      const role = data.admin ? "authority" : "user";
+
+      // Call backend API
+      const res = await fetch("http://localhost:5000/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: data.name,
+          email: data.email,
+          password: data.password,
+          photo: data.photo,
+          role,
+        }),
+      });
+
+      const result = await res.json();
+
+      if (!res.ok) throw new Error(result.message || "Registration failed");
+
+      // Save JWT in localStorage
+      localStorage.setItem("token", result.token);
+
+      // Redirect based on role
+      if (role === "authority") navigate("/authority-dashboard");
+      else navigate("/user-dashboard");
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   return (
-    <div className="min-h-screen flex">
-      {/* Left Side */}
+    <div className="min-h-screen flex bg-gray-50">
+      {/* Left Image */}
       <div className="hidden md:flex w-1/2 bg-green-600 items-center justify-center">
-        <img
-          src={img}
-          alt="Register Illustration"
-          className="w-3/4"
-        />
+        <img src={img} alt="Register" className="w-3/4 rounded-lg" />
       </div>
 
-      {/* Right Side */}
-      <div className="w-full md:w-1/2 flex items-center justify-center">
-        <div className="w-full max-w-md p-8">
-          <h2 className="text-2xl font-bold text-center mb-6">
-            Create account
+      {/* Right Form */}
+      <div className="w-full md:w-1/2 flex items-center justify-center p-6">
+        <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
+          <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
+            Create Account
           </h2>
 
+          {/* Toggle Buttons */}
           <div className="flex bg-green-100 rounded-full mb-6">
             <button
               onClick={() => navigate("/login")}
-              className="w-1/2 py-2 text-sm  text-gray-600 rounded-full"
+              className="w-1/2 py-2 text-sm text-gray-600 rounded-full hover:bg-green-50"
             >
               Login
             </button>
             <button
               onClick={() => navigate("/register")}
-              className="w-1/2 py-2 text-sm  bg-green-600 text-white rounded-full"
+              className="w-1/2 py-2 text-sm bg-green-600 text-white rounded-full"
             >
               Sign Up
             </button>
@@ -59,9 +86,7 @@ const Register = () => {
                 {...register("name", { required: "Full name is required" })}
               />
               {errors.name && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.name.message}
-                </p>
+                <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
               )}
             </div>
 
@@ -69,7 +94,7 @@ const Register = () => {
             <div>
               <input
                 type="email"
-                placeholder="Email address"
+                placeholder="Email Address"
                 className="w-full input input-bordered"
                 {...register("email", {
                   required: "Email is required",
@@ -80,9 +105,7 @@ const Register = () => {
                 })}
               />
               {errors.email && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.email.message}
-                </p>
+                <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
               )}
             </div>
 
@@ -92,14 +115,10 @@ const Register = () => {
                 type="text"
                 placeholder="Photo URL"
                 className="w-full input input-bordered"
-                {...register("photo", {
-                  required: "Photo URL is required",
-                })}
+                {...register("photo", { required: "Photo URL is required" })}
               />
               {errors.photo && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.photo.message}
-                </p>
+                <p className="text-red-500 text-sm mt-1">{errors.photo.message}</p>
               )}
             </div>
 
@@ -118,35 +137,31 @@ const Register = () => {
                 })}
               />
               {errors.password && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.password.message}
-                </p>
+                <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
               )}
             </div>
 
-            {/* Checkbox */}
+            {/* Checkbox for authority */}
             <label className="flex items-center gap-2 text-sm">
               <input
                 type="checkbox"
                 className="checkbox checkbox-success"
                 {...register("admin")}
               />
-              Register as authority admin
+              Register as Authority
             </label>
 
-            {/* Submit */}
+            {/* Submit Button */}
             <button
               type="submit"
-              className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-semibold"
+              className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-semibold mt-2"
             >
               Create Account
             </button>
           </form>
 
           {/* Divider */}
-          <div className="text-center my-4 text-sm text-gray-500">
-            or continue with
-          </div>
+          <div className="text-center my-4 text-sm text-gray-500">or continue with</div>
 
           {/* Social Login */}
           <div className="flex justify-center gap-4">
@@ -161,9 +176,9 @@ const Register = () => {
           {/* Login Link */}
           <p className="text-center mt-6 text-sm">
             Already have an account?{" "}
-            <span className="text-green-600 cursor-pointer font-semibold">
+            <Link to="/login" className="text-green-600 font-semibold">
               Login
-            </span>
+            </Link>
           </p>
         </div>
       </div>

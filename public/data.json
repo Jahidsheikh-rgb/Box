@@ -1,0 +1,39 @@
+{
+  "totalComplaints": 2671,
+  "semesterReportScatter": [
+    {"x": 10, "y": -60}, {"x": 20, "y": 70}, {"x": 35, "y": -10}, 
+    {"x": 45, "y": -65}, {"x": 55, "y": 50}, {"x": 70, "y": -20},
+    {"x": 80, "y": 25}, {"x": 90, "y": -40}, {"x": 105, "y": 65},
+    {"x": 120, "y": 10}, {"x": 135, "y": -70}, {"x": 145, "y": 55},
+    {"x": 160, "y": -15}, {"x": 175, "y": 20}, {"x": 190, "y": -55},
+    {"x": 200, "y": 75}
+  ],
+  "statusData": [
+    { "name": "Solved", "value": 45, "color": "#1e40af" },
+    { "name": "Unsolved", "value": 35, "color": "#7e22ce" },
+    { "name": "Rejected", "value": 20, "color": "#f472b6" }
+  ],
+  "resolutionRates": [
+    { "name": "Hostel A", "value": 25, "color": "#1d4ed8" },
+    { "name": "Hostel B", "value": 25, "color": "#f472b6" },
+    { "name": "Hostel C", "value": 20, "color": "#a855f7" },
+    { "name": "Source", "value": 30, "color": "#10b981" }
+  ],
+  "sourceData": [
+    { "name": "Source A", "value": -55 },
+    { "name": "In Person", "value": 28 },
+    { "name": "E-mail", "value": 15 },
+    { "name": "Complaint System", "value": -35 },
+    { "name": "Other 1", "value": 10 },
+    { "name": "Other 2", "value": 62 }
+  ],
+  "trendData": [
+    {"month": "Jan", "h1": -60, "h2": 10, "h3": -20},
+    {"month": "Feb", "h1": -30, "h2": 45, "h3": -40},
+    {"month": "Mar", "h1": -65, "h2": 15, "h3": -30},
+    {"month": "Apr", "h1": 55, "h2": -20, "h3": -65},
+    {"month": "May", "h1": 15, "h2": -40, "h3": -75},
+    {"month": "Jun", "h1": 45, "h2": -15, "h3": -55},
+    {"month": "Jul", "h1": -60, "h2": 25, "h3": -25}
+  ]
+}

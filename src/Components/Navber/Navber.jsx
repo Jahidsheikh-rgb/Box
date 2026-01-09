@@ -5,8 +5,11 @@ const Navbar = () => {
 
   const menuItems = (
     <>
+    <li>
+        <NavLink to="/">Home</NavLink>
+      </li>
       <li>
-        <NavLink to="/" className={({ isActive }) => isActive ? "active" : ""}>
+        <NavLink to="/box" className={({ isActive }) => isActive ? "active" : ""}>
           Box
         </NavLink>
       </li>
@@ -19,10 +22,10 @@ const Navbar = () => {
 
      
       <li>
-        <NavLink to="/profile">About us</NavLink>
+        <NavLink to="/about">About us</NavLink>
       </li>
       <li>
-        <NavLink to="/complaints">Contact</NavLink>
+        <NavLink to="/contact">Contact</NavLink>
       </li>
     </>
   );

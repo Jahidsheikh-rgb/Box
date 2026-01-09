@@ -1,46 +1,100 @@
-
 import { createBrowserRouter } from "react-router-dom";
+import DynamicLayout from "../Components/Common/DynamicLayout";
 import Error from "../Error/Error";
-import Layout from "../Layout/Layout";
-import Student_Home from "../Pages/Student/Student_Home";
-import Dashboard from "../Pages/Student/Dashboard";
+
+import Home from "../Home/Home";
 import Register from "../Page/Register";
 import Login from "../Page/Login";
-import Notice from "../Pages/Student/Notice";
 
+import Student_Home from "../Pages/Student/Student_Home";
+import Dashboard from "../Pages/Student/Dashboard";
+import UserDashboard from "../Pages/Student/UserDashboard";
+
+import AuthorityDashboard from "../Pages/Authority/AuthorityDashboard";
+import ModeratorDashboard from "../Pages/Moderator/ModeratorDashboard";
+import SuperAdminDashboard from "../Pages/Admin/SuperAdminDashboard";
+
+import Unauthorized from "../Pages/Error/Unauthorized";
+import ProtectedRoute from "./ProtectedRoute";
+
+import AdminLayout from "../Layout/AdminLayout";
+import ModeratorAuthorityLayout from "../Layout/ModeratorAuthorityLayout";
+import Layout from "../Layout/Layout";
+import Complaints from "../Pages/Admin/Complaints/Complaints";
+import Notice from "../Pages/Student/Notice";
+import AdminNotice from "../Pages/Admin/Adminnotice/AdminNotice";
+import Accounts from "../Pages/Admin/Accounts/Accounts";
 
 const AppRoutes = createBrowserRouter([
+
   {
     path: "/",
-    element: <Layout />,
-    errorElement: <Error/>,
+    element: <DynamicLayout />,
+    errorElement: <Error />,
     children: [
+      { index: true, element: <Home /> },
+      { path: "register", element: <Register /> },
+      { path: "login", element: <Login /> },
+      { path: "complaints", element: <Dashboard /> },
+      { path: "notice", element: <Notice/> },
+
       {
-        path: "/",
-        element: <Student_Home/>,
-      },{
-        path:"/complaints",
-        element:<Dashboard/>
-      },{
-        path:"/register",
-        element:<Register/>
-      },{
-    path: "/login",
-    element:<Login/>
-  },{
-    path:"/notice",
-    element:<Notice/>
-  }
-     
-    
-    
+        path: "user-dashboard",
+        element: (
+          <Layout>
+            <UserDashboard />
+          </Layout>
+        ),
+      },
+
+      { path: "unauthorized", element: <Unauthorized /> },
+    ],
+  },
+
+  
+  {
+    path: "/admin",
+    element: (
+      <ProtectedRoute allowedRoles={["admin"]}>
+        <AdminLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      { index: true, element: <SuperAdminDashboard /> },
+      { path: "complaints", element: <Student_Home />  },
+      { path: "admin_notice", element: <AdminNotice /> },
+      {
+        path: "accounts",
+        element: <Accounts />,
+      }
+    ],
+  },
+
+  {
+    path: "/moderator",
+    element: (
+      <ProtectedRoute allowedRoles={["moderator"]}>
+        <ModeratorAuthorityLayout role="moderator" />
+      </ProtectedRoute>
+    ),
+    children: [
+      { index: true, element: <ModeratorDashboard /> },
+    ],
+  },
+
+  
+  {
+    path: "/authority",
+    element: (
+      <ProtectedRoute allowedRoles={["authority"]}>
+        <ModeratorAuthorityLayout role="authority" />
+      </ProtectedRoute>
+    ),
+    children: [
+      { index: true, element: <Student_Home /> },
+      { path: "box", element: <Student_Home /> },
     ],
   },
 ]);
 
 export default AppRoutes;
-
-
- 
-
-
