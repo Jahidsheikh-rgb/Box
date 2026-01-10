@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { FaTrash } from "react-icons/fa";
 
-const Accounts = () => {
+const AuthorityAcconts = () => {
   const [accounts, setAccounts] = useState([]);
   const [role, setRole] = useState("student");
   const [email, setEmail] = useState("");
@@ -62,7 +61,7 @@ const Accounts = () => {
 
   // ================= SPLIT ACCOUNTS =================
   const studentAccounts = accounts.filter((acc) => acc.role === "student");
-  const authorityAccounts = accounts.filter((acc) => acc.role === "authority");
+  const Moderatoraccounts = accounts.filter((acc) => acc.role === "moderator");
 
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-8">
@@ -79,7 +78,7 @@ const Accounts = () => {
             className="border p-3 rounded"
           >
             <option value="student">Student</option>
-            <option value="authority">Authority</option>
+            <option value="authority">Moderator</option>
           </select>
 
           <input
@@ -124,12 +123,12 @@ const Accounts = () => {
                 >
                   <span>{acc.email}</span>
                   <span>{acc.createdAt}</span>
-                   <button
-  onClick={() => handleDelete(acc._id)}
-  className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 flex items-center justify-center"
->
-  <FaTrash className="w-4 h-4" />
-</button>
+                  <button
+                    onClick={() => handleDelete(acc._id)}
+                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                  >
+                    Remove
+                  </button>
                 </li>
               ))}
             </ul>
@@ -138,23 +137,24 @@ const Accounts = () => {
 
         {/* RIGHT SIDE - AUTHORITIES */}
         <div className="flex-1 bg-white shadow rounded-lg p-6 h-[500px] overflow-y-auto">
-          <h2 className="text-xl font-semibold mb-4">Authorities</h2>
-          {authorityAccounts.length === 0 ? (
-            <p className="text-gray-500">No authorities found.</p>
+          <h2 className="text-xl font-semibold mb-4">Moderator</h2>
+          {Moderatoraccounts.length === 0 ? (
+            <p className="text-gray-500">No Moderator found.</p>
           ) : (
             <ul className="space-y-2">
-              {authorityAccounts.map((acc) => (
+              {Moderatoraccounts.map((acc) => (
                 <li
                   key={acc._id}
                   className="flex justify-between items-center border p-3 rounded hover:bg-gray-50"
                 >
                   <span>{acc.email}</span>
+                   <span>{acc.createdAt}</span>
                   <button
-  onClick={() => handleDelete(acc._id)}
-  className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 flex items-center justify-center"
->
-  <FaTrash className="w-4 h-4" />
-</button>
+                    onClick={() => handleDelete(acc._id)}
+                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                  >
+                    Remove
+                  </button>
                 </li>
               ))}
             </ul>
@@ -165,4 +165,6 @@ const Accounts = () => {
   );
 };
 
-export default Accounts;
+export default AuthorityAcconts;
+
+

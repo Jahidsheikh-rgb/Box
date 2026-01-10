@@ -3,45 +3,220 @@
     "id": 1,
     "title": "Broken Road near Main Gate",
     "description": "Large pothole near the main gate causing accidents for bikes and cars.",
-    "department": "Infrastructure",
+    "department": "CE",
+    "problemType": "Infrastructure",
+    "status": "running",
     "image": "https://images.unsplash.com/photo-1581092160562-40aa08e78837",
     "author": "Student A",
-    "date": "2025-01-01"
+    "createdAt": "2025-01-01T09:30:00Z"
   },
   {
     "id": 2,
     "title": "Street Light Not Working",
-    "description": "Street light in front of academic building flickers and turns off at night.",
-    "department": "Electrical",
+    "description": "Street light in front of academic building is not functioning at night.",
+    "department": "GDM",
+    "problemType": "Infrastructure",
+    "status": "solved",
     "image": "https://images.unsplash.com/photo-1509223197845-458d87318791",
     "author": "Student B",
-    "date": "2025-01-02"
+    "createdAt": "2025-01-02T18:10:00Z"
   },
   {
     "id": 3,
-    "title": "WiFi Connectivity Issue",
-    "description": "Very slow internet speed in computer lab during class hours.",
-    "department": "IT Support",
+    "title": "Slow Internet in Computer Lab",
+    "description": "Internet speed becomes very slow during lab hours.",
+    "department": "CSE&CSIT",
+    "problemType": "IT",
+    "status": "running",
     "image": "https://images.unsplash.com/photo-1518770660439-4636190af475",
     "author": "Student C",
-    "date": "2025-01-03"
+    "createdAt": "2025-01-03T11:45:00Z"
   },
   {
     "id": 4,
-    "title": "Hostel Water Supply Problem",
-    "description": "Irregular water supply in boys hostel since last week.",
-    "department": "Hostel",
+    "title": "Water Supply Issue in Hostel",
+    "description": "Water supply is irregular in the boys' hostel.",
+    "department": "BBA",
+    "problemType": "Hostel",
+    "status": "rejected",
     "image": "https://images.unsplash.com/photo-1560518883-ce09059eeffa",
     "author": "Student D",
-    "date": "2025-01-04"
+    "createdAt": "2025-01-04T07:20:00Z"
   },
   {
     "id": 5,
     "title": "Delay in Certificate Issuance",
-    "description": "Applied for academic certificate but no update for over a month.",
-    "department": "Administration",
+    "description": "Applied for certificate but no update for over a month.",
+    "department": "CSE& CSIT",
+    "problemType": "Administration",
+    "status": "running",
     "image": "https://images.unsplash.com/photo-1521791136064-7986c2920216",
     "author": "Student E",
-    "date": "2025-01-05"
+    "createdAt": "2025-01-05T14:55:00Z"
+  },
+  {
+    "id": 6,
+    "title": "Projector Not Working in Classroom",
+    "description": "Projector shuts down frequently during lectures.",
+    "department": "GDM",
+    "problemType": "Academic",
+    "status": "solved",
+    "image": "https://images.unsplash.com/photo-1498050108023-c5249f4df085",
+    "author": "Student F",
+    "createdAt": "2025-01-06T10:15:00Z"
+  },
+  {
+    "id": 7,
+    "title": "AC Not Working in Library",
+    "description": "Air conditioning system in central library is broken.",
+    "department": "Library Services",
+    "problemType": "Infrastructure",
+    "status": "running",
+    "image": "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f",
+    "author": "Student G",
+    "createdAt": "2025-01-07T13:40:00Z"
+  },
+  {
+    "id": 8,
+    "title": "Incorrect Result Published",
+    "description": "Marks for one subject are incorrectly published.",
+    "department": "FDT",
+    "problemType": "Administration",
+    "status": "running",
+    "image": "https://images.unsplash.com/photo-1517841905240-472988babdf9",
+    "author": "Student H",
+    "createdAt": "2025-01-08T09:10:00Z"
+  },
+  {
+    "id": 9,
+    "title": "Broken Chairs in Lecture Hall",
+    "description": "Several chairs are broken in lecture hall 201.",
+    "department": "CE",
+    "problemType": "Infrastructure",
+    "status": "solved",
+    "image": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f",
+    "author": "Student I",
+    "createdAt": "2025-01-09T12:30:00Z"
+  },
+  {
+    "id": 10,
+    "title": "Hostel Room Lighting Issue",
+    "description": "Lights frequently go out in hostel room.",
+    "department": "CSE& CSIT",
+    "problemType": "Hostel",
+    "status": "running",
+    "image": "https://images.unsplash.com/photo-1505691938895-1758d7feb511",
+    "author": "Student J",
+    "createdAt": "2025-01-10T16:20:00Z"
+  },
+  {
+    "id": 11,
+    "title": "Lab Equipment Not Available",
+    "description": "Required lab equipment is unavailable for experiments.",
+    "department": "English",
+    "problemType": "Academic",
+    "status": "running",
+    "image": "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952",
+    "author": "Student K",
+    "createdAt": "2025-01-11T10:50:00Z"
+  },
+  {
+    "id": 12,
+    "title": "Fee Payment Portal Error",
+    "description": "Unable to pay semester fees due to portal error.",
+    "department": "FDT",
+    "problemType": "IT",
+    "status": "solved",
+    "image": "https://images.unsplash.com/photo-1556740749-887f6717d7e4",
+    "author": "Student L",
+    "createdAt": "2025-01-12T15:05:00Z"
+  },
+  {
+    "id": 13,
+    "title": "Exam Schedule Conflict",
+    "description": "Two exams scheduled on the same day and time.",
+    "department": "Examination Office",
+    "problemType": "Administration",
+    "status": "running",
+    "image": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b",
+    "author": "Student M",
+    "createdAt": "2025-01-13T11:00:00Z"
+  },
+  {
+    "id": 14,
+    "title": "Water Leakage in Classroom",
+    "description": "Ceiling leakage during rainfall.",
+    "department": "CE",
+    "problemType": "Infrastructure",
+    "status": "rejected",
+    "image": "https://images.unsplash.com/photo-1503387762-592deb58ef4e",
+    "author": "Student N",
+    "createdAt": "2025-01-14T08:45:00Z"
+  },
+  {
+    "id": 15,
+    "title": "Software License Expired",
+    "description": "Required software license expired in lab computers.",
+    "department": "CSE& CSIT",
+    "problemType": "IT",
+    "status": "running",
+    "image": "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
+    "author": "Student O",
+    "createdAt": "2025-01-15T14:10:00Z"
+  },
+  {
+    "id": 16,
+    "title": "Canteen Hygiene Issue",
+    "description": "Poor hygiene maintenance in campus canteen.",
+    "department": "Student Affairs",
+    "problemType": "Administration",
+    "status": "solved",
+    "image": "https://images.unsplash.com/photo-1551218808-94e220e084d2",
+    "author": "Student P",
+    "createdAt": "2025-01-16T12:00:00Z"
+  },
+  {
+    "id": 17,
+    "title": "Lab Computer Not Booting",
+    "description": "Several computers fail to start in the lab.",
+    "department": "Computer Science & Engineering",
+    "problemType": "IT",
+    "status": "running",
+    "image": "https://images.unsplash.com/photo-1518770660439-4636190af475",
+    "author": "Student Q",
+    "createdAt": "2025-01-17T09:40:00Z"
+  },
+  {
+    "id": 18,
+    "title": "Delay in Scholarship Payment",
+    "description": "Scholarship amount not credited yet.",
+    "department": "Accounts Office",
+    "problemType": "Administration",
+    "status": "running",
+    "image": "https://images.unsplash.com/photo-1521791136064-7986c2920216",
+    "author": "Student R",
+    "createdAt": "2025-01-18T16:30:00Z"
+  },
+  {
+    "id": 19,
+    "title": "Hostel Security Concern",
+    "description": "Security guards not present at night.",
+    "department": "Student Affairs",
+    "problemType": "Hostel",
+    "status": "rejected",
+    "image": "https://images.unsplash.com/photo-1517841905240-472988babdf9",
+    "author": "Student S",
+    "createdAt": "2025-01-19T22:10:00Z"
+  },
+  {
+    "id": 20,
+    "title": "Noise Disturbance During Exams",
+    "description": "Construction noise disrupting exams.",
+    "department": "Civil Engineering",
+    "problemType": "Infrastructure",
+    "status": "solved",
+    "image": "https://images.unsplash.com/photo-1503387762-592deb58ef4e",
+    "author": "Student T",
+    "createdAt": "2025-01-20T10:25:00Z"
   }
 ]

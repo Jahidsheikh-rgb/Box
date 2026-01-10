@@ -16,10 +16,9 @@ const AdminNavbar = () => {
     <li>
       <NavLink
         to="/admin"
-        end
-        className={({ isActive }) =>
-          isActive ? "text-yellow-400 font-bold" : ""
-        }
+        // className={({ isActive }) =>
+        //   isActive ? "text-yellow-400 font-bold" : ""
+        //}
       >
         Dashboard
       </NavLink>

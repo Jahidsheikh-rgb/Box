@@ -1,6 +1,7 @@
 // src/layouts/ModeratorAuthorityLayout.jsx
 import { Outlet } from "react-router-dom";
 import ModeratorAuthorityNavbar from "../Components/Navber/ModeratorAuthorityNavbar";
+import Footer from "../Components/Footer/Footer";
 
 export default function ModeratorAuthorityLayout({ role, children }) {
   return (
@@ -13,6 +14,7 @@ export default function ModeratorAuthorityLayout({ role, children }) {
         {/* Render children if provided, otherwise use <Outlet /> for nested routes */}
         {children ? children : <Outlet/>}
       </main>
+      <Footer />
     </div>
   );
 }

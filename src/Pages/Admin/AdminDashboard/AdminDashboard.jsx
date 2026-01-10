@@ -239,9 +239,9 @@ export default function AdminDashboard() {
   {/* Custom High-Weight Legend at Top Right for easy reading */}
   <div className="flex justify-end gap-6 mb-4 px-4">
     {[
-      { label: 'Hostel A', color: '#1e1b4b' },
-      { label: 'Hostel B', color: '#db2777' },
-      { label: 'Hostel C', color: '#7c3aed' }
+      { label: 'FDT', color: '#1e1b4b' },
+      { label: 'GDM', color: '#db2777' },
+      { label: 'CSE&CSIT C', color: '#7c3aed' }
     ].map((item, i) => (
       <div key={i} className="flex items-center gap-2">
         <div className="w-3 h-1 rounded-full" style={{ backgroundColor: item.color }} />

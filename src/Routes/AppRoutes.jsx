@@ -24,6 +24,9 @@ import Complaints from "../Pages/Admin/Complaints/Complaints";
 import Notice from "../Pages/Student/Notice";
 import AdminNotice from "../Pages/Admin/Adminnotice/AdminNotice";
 import Accounts from "../Pages/Admin/Accounts/Accounts";
+import AuthorityAcconts from "../Pages/Authority/AuthorityAcconts/AuthorityAcconts";
+import About from "../Pages/Student/About";
+import Contracts from "../Pages/Student/Contracts";
 
 const AppRoutes = createBrowserRouter([
 
@@ -37,6 +40,8 @@ const AppRoutes = createBrowserRouter([
       { path: "login", element: <Login /> },
       { path: "complaints", element: <Dashboard /> },
       { path: "notice", element: <Notice/> },
+       { path: "about", element: <About/> },
+       { path: "contact", element: <Contracts/> },
 
       {
         path: "user-dashboard",
@@ -92,7 +97,9 @@ const AppRoutes = createBrowserRouter([
     ),
     children: [
       { index: true, element: <Student_Home /> },
-      { path: "box", element: <Student_Home /> },
+      { path: "Dashboard", element: <AuthorityDashboard /> },
+       { path: "notice", element: <AdminNotice /> },
+       { path: "accounts", element: <AuthorityAcconts /> },
     ],
   },
 ]);
