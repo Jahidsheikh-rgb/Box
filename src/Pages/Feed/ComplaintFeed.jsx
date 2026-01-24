@@ -1,4 +1,3 @@
-// pages/ComplaintFeed.jsx
 import { useEffect, useMemo, useState } from "react";
 import Sidebar from "../../Components/Complaint/Sidebar";
 import ComplaintCard from "../../Components/Complaint/ComplaintCard";
@@ -13,45 +12,37 @@ const ComplaintFeed = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // ================= FETCH COMPLAINTS =================
   useEffect(() => {
     const loadComplaints = async () => {
       try {
         const data = await fetchComplaints();
-        setComplaints(data);
+        setComplaints(Array.isArray(data) ? data : []);
       } catch {
-        setError("Unable to load complaints.");
+        setError("Unable to load complaints from database.");
       } finally {
         setLoading(false);
       }
     };
-
     loadComplaints();
   }, []);
 
-  // ================= TIME FILTER FUNCTION =================
   const isWithinTime = (createdAt) => {
     if (timeFilter === "all") return true;
 
     const now = new Date();
     const date = new Date(createdAt);
-    const diffInDays =
-      (now - date) / (1000 * 60 * 60 * 24);
+    const diffInDays = (now - date) / (1000 * 60 * 60 * 24);
 
-    switch (timeFilter) {
-      case "today":
-        return diffInDays <= 1;
-      case "7days":
-        return diffInDays <= 7;
-      case "30days":
-        return diffInDays <= 30;
-      default:
-        return true;
-    }
+    if (timeFilter === "today") return diffInDays <= 1;
+    if (timeFilter === "7days") return diffInDays <= 7;
+    if (timeFilter === "30days") return diffInDays <= 30;
+
+    return true;
   };
 
-  // ================= FILTERED COMPLAINTS =================
   const filteredComplaints = useMemo(() => {
+    if (!Array.isArray(complaints)) return [];
+
     return complaints.filter((c) => {
       const deptMatch =
         selectedDept === "All" || c.department === selectedDept;
@@ -59,9 +50,9 @@ const ComplaintFeed = () => {
       const statusMatch =
         statusFilter === "all" || c.status === statusFilter;
 
-      const searchMatch = c.title
-        ?.toLowerCase()
-        .includes(search.toLowerCase());
+      const searchMatch =
+        c.title?.toLowerCase().includes(search.toLowerCase()) ||
+        c.description?.toLowerCase().includes(search.toLowerCase());
 
       const timeMatch = isWithinTime(c.createdAt);
 
@@ -69,93 +60,102 @@ const ComplaintFeed = () => {
     });
   }, [complaints, selectedDept, statusFilter, search, timeFilter]);
 
-  // ================= UNIQUE DEPARTMENTS =================
   const departments = useMemo(() => {
+    if (!Array.isArray(complaints)) return ["All"];
     return ["All", ...new Set(complaints.map((c) => c.department))];
   }, [complaints]);
 
-  // ================= UI STATES =================
-  if (loading)
+  if (loading) {
     return (
-      <div className="p-6 text-center text-lg font-medium">
-        Loading complaints...
+      <div className="flex justify-center items-center min-h-screen bg-base-200">
+        <span className="loading loading-dots loading-lg text-primary"></span>
       </div>
     );
+  }
 
-  if (error)
+  if (error) {
     return (
-      <div className="p-6 text-center text-red-500 font-medium">
-        {error}
+      <div className="flex justify-center items-center min-h-screen bg-base-200">
+        <p className="text-red-500 font-semibold">{error}</p>
       </div>
     );
+  }
 
   return (
     <div className="flex min-h-screen bg-base-200">
-      {/* ================= SIDEBAR ================= */}
-      <Sidebar selected={selectedDept} setSelected={setSelectedDept} />
+      <Sidebar
+        selected={selectedDept}
+        setSelected={setSelectedDept}
+        departments={departments}
+      />
 
-      {/* ================= MAIN CONTENT ================= */}
-      <div className="flex-1 p-6">
-        {/* ================= FILTER BAR ================= */}
-        <div className="flex flex-col md:flex-row gap-4 mb-6 items-start md:items-center">
-          {/* Search */}
+      <div className="flex-1 p-4 lg:p-8">
+        <div className="bg-white p-4 rounded-2xl shadow-sm flex flex-wrap gap-4 mb-8 items-center border border-slate-100">
           <input
             type="text"
-            placeholder="Search complaints..."
-            className="input input-bordered w-full md:max-w-sm"
+            placeholder="Search titles..."
+            className="input input-bordered flex-1 min-w-[200px]"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
 
-          {/* Department Filter */}
           <select
-            className="select select-bordered w-full md:max-w-xs"
-            value={selectedDept}
-            onChange={(e) => setSelectedDept(e.target.value)}
-          >
-            {departments.map((dept) => (
-              <option key={dept} value={dept}>
-                {dept}
-              </option>
-            ))}
-          </select>
-
-          {/* Status Filter */}
-          <select
-            className="select select-bordered w-full md:max-w-xs"
+            className="select select-bordered"
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
           >
-            <option value="all">All Status</option>
-            <option value="running">Running</option>
-            <option value="solved">Solved</option>
-            <option value="rejected">Rejected</option>
+            <option value="all">Any Status</option>
+            <option value="PENDING">Pending</option>
+            <option value="IN_PROGRESS">In Progress</option>
+            <option value="RESOLVED">Resolved</option>
           </select>
 
-          {/* Time Filter */}
           <select
-            className="select select-bordered w-full md:max-w-xs"
+            className="select select-bordered"
             value={timeFilter}
             onChange={(e) => setTimeFilter(e.target.value)}
           >
-            <option value="all">All Time</option>
+            <option value="all">Any Time</option>
             <option value="today">Today</option>
             <option value="7days">Last 7 Days</option>
             <option value="30days">Last 30 Days</option>
           </select>
         </div>
 
-        {/* ================= COMPLAINT GRID ================= */}
+        <div className="mb-6 flex justify-between items-center px-2">
+          <h2 className="text-xl font-bold text-slate-700">
+            Showing {filteredComplaints.length} Complaints
+          </h2>
+          <span className="text-sm font-medium text-slate-400 uppercase tracking-widest">
+            {selectedDept} Feed
+          </span>
+        </div>
+
         {filteredComplaints.length ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {filteredComplaints.map((complaint) => (
-              <ComplaintCard key={complaint.id} complaint={complaint} />
+              <ComplaintCard
+                key={complaint._id || complaint.id}
+                complaint={complaint}
+              />
             ))}
           </div>
         ) : (
-          <p className="text-center text-gray-500 mt-10 text-lg">
-            No complaints found 🚫
-          </p>
+          <div className="text-center py-20 bg-white rounded-3xl border-2 border-dashed border-slate-200">
+            <p className="text-slate-400 text-lg">
+              No complaints found for this selection 🚫
+            </p>
+            <button
+              onClick={() => {
+                setSearch("");
+                setStatusFilter("all");
+                setSelectedDept("All");
+              }}
+              className="btn btn-link btn-sm text-primary"
+            >
+              Clear Filters
+            </button>
+          </div>
         )}
       </div>
     </div>

@@ -38,10 +38,16 @@ const AppRoutes = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: "register", element: <Register /> },
       { path: "login", element: <Login /> },
-      { path: "complaints", element: <Dashboard /> },
+      { 
+  path: "complaints", 
+  element: <ProtectedRoute allowedRoles={["user", "admin", "moderator", "authority"]}><Dashboard /></ProtectedRoute> 
+},
       { path: "notice", element: <Notice/> },
        { path: "about", element: <About/> },
-       { path: "contact", element: <Contracts/> },
+      { 
+  path: "contact", 
+  element: <ProtectedRoute allowedRoles={["user", "admin", "moderator", "authority"]}><Contracts /></ProtectedRoute> 
+},
 
       {
         path: "user-dashboard",

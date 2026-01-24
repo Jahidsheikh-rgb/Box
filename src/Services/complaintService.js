@@ -1,9 +1,17 @@
-export const fetchComplaints = async () => {
-  const res = await fetch("/complaint.json");
+import axios from "axios";
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch complaints");
+const API_URL = "../../public/complaints.json";
+
+export const fetchComplaints = async () => {
+  const response = await axios.get(API_URL);
+
+  if (Array.isArray(response.data)) {
+    return response.data;
   }
 
-  return res.json();
+  if (Array.isArray(response.data.complaints)) {
+    return response.data.complaints;
+  }
+
+  return [];
 };

@@ -1,10 +1,17 @@
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { FaGoogle, FaFacebookF } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
-import img from "../assets/image.png";
+import { useNavigate, useLocation, Link } from "react-router-dom";
+import { FaGoogle, FaFacebookF, FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import { useAuth } from "../Context/AuthContext";
+import toast from "react-hot-toast";
+import axios from "axios";
 
 const Register = () => {
+  const { registerUser, updateUserProfile, googleLogin } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -13,173 +20,156 @@ const Register = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
+    setLoading(true);
     try {
-      // Role logic: checkbox = authority, else user
-      const role = data.admin ? "authority" : "user";
+      // 1. Upload image to ImgBB
+      let photoURL = "";
+      if (data.photo?.[0]) {
+        const formData = new FormData();
+        formData.append("image", data.photo[0]);
+        try {
+          // Replace with your actual API key if this one expires
+          const res = await axios.post(
+            `https://api.imgbb.com/1/upload?key=ec638d6b6eabd0cb20b266acfa06c403`,
+            formData
+          );
+          photoURL = res.data.data.display_url;
+        } catch (imgErr) {
+          console.error("Image Upload Failed", imgErr);
+        }
+      }
 
-      // Call backend API
-      const res = await fetch("http://localhost:5000/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: data.name,
-          email: data.email,
-          password: data.password,
-          photo: data.photo,
-          role,
-        }),
-      });
+      // 2. Firebase Registration
+      const result = await registerUser(data.email, data.password);
 
-      const result = await res.json();
+      // 3. Update Profile & Navigate
+      if (result?.user) {
+        await updateUserProfile(data.name, photoURL);
+        toast.success("Registration Successful! Welcome Home.");
+        
+        // Navigate to intended page or Home, and replace history
+        const from = location.state?.from?.pathname || "/";
+        navigate(from, { replace: true });
+      }
+      
+    } catch (err) {
+      console.error("Registration Error Code:", err.code);
 
-      if (!res.ok) throw new Error(result.message || "Registration failed");
+      // Specific Error Handling for "Email Already In Use"
+      if (err.code === "auth/email-already-in-use") {
+        toast.error("This email is already registered. Redirecting to Login...");
+        // Auto-redirect to login after 2 seconds
+        setTimeout(() => navigate("/login"), 2000);
+      } 
+      else if (err.code === "auth/weak-password") {
+        toast.error("Password is too weak. Please use at least 6 characters.");
+      } 
+      else if (err.code === "auth/invalid-email") {
+        toast.error("The email address is badly formatted.");
+      }
+      else {
+        toast.error(err.message || "Registration failed. Please try again.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
-      // Save JWT in localStorage
-      localStorage.setItem("token", result.token);
-
-      // Redirect based on role
-      if (role === "authority") navigate("/authority-dashboard");
-      else navigate("/user-dashboard");
-    } catch (error) {
-      alert(error.message);
+  const handleGoogleLogin = async () => {
+    try {
+      setLoading(true);
+      await googleLogin();
+      toast.success("Logged in with Google!");
+      navigate(location.state?.from?.pathname || "/", { replace: true });
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex bg-gray-50">
-      {/* Left Image */}
-      <div className="hidden md:flex w-1/2 bg-green-600 items-center justify-center">
-        <img src={img} alt="Register" className="w-3/4 rounded-lg" />
+    <div className="min-h-screen flex bg-base-200">
+      {/* Left Decoration */}
+      <div className="hidden lg:flex w-1/2 bg-green-600 items-center justify-center p-12">
+        <div className="max-w-md text-center text-white">
+          <h1 className="text-5xl font-bold mb-6">UniBox</h1>
+          <p className="text-xl opacity-90 italic">"Join the most transparent community platform today."</p>
+        </div>
       </div>
 
       {/* Right Form */}
-      <div className="w-full md:w-1/2 flex items-center justify-center p-6">
-        <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
-          <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
-            Create Account
-          </h2>
-
-          {/* Toggle Buttons */}
-          <div className="flex bg-green-100 rounded-full mb-6">
-            <button
-              onClick={() => navigate("/login")}
-              className="w-1/2 py-2 text-sm text-gray-600 rounded-full hover:bg-green-50"
-            >
-              Login
-            </button>
-            <button
-              onClick={() => navigate("/register")}
-              className="w-1/2 py-2 text-sm bg-green-600 text-white rounded-full"
-            >
-              Sign Up
-            </button>
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-6">
+        <div className="w-full max-w-md bg-white p-10 rounded-3xl shadow-2xl border border-gray-100">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-gray-800">Create Account</h2>
           </div>
 
-          {/* Form */}
+          <div className="grid grid-cols-2 bg-gray-100 rounded-2xl p-1 mb-8">
+            <button onClick={() => navigate("/login")} className="py-2 text-gray-500 font-medium">Login</button>
+            <button className="py-2 bg-white text-green-600 font-bold rounded-xl shadow-sm">Sign Up</button>
+          </div>
+
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            {/* Full Name */}
-            <div>
-              <input
-                type="text"
-                placeholder="Full Name"
-                className="w-full input input-bordered"
-                {...register("name", { required: "Full name is required" })}
-              />
-              {errors.name && (
-                <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
-              )}
+            <input
+              type="text"
+              placeholder="Full Name"
+              className={`input input-bordered w-full focus:input-success ${errors.name && 'input-error'}`}
+              {...register("name", { required: "Name is required" })}
+            />
+            {errors.name && <p className="text-red-500 text-xs">{errors.name.message}</p>}
+
+            <input
+              type="email"
+              placeholder="Email address"
+              className={`input input-bordered w-full focus:input-success ${errors.email && 'input-error'}`}
+              {...register("email", { required: "Email is required" })}
+            />
+            {errors.email && <p className="text-red-500 text-xs">{errors.email.message}</p>}
+
+            <div className="form-control w-full">
+              <label className="label py-0"><span className="label-text-alt text-gray-400">Profile Photo</span></label>
+              <input type="file" className="file-input file-input-bordered file-input-success w-full" {...register("photo")} />
             </div>
 
-            {/* Email */}
-            <div>
+            <div className="relative">
               <input
-                type="email"
-                placeholder="Email Address"
-                className="w-full input input-bordered"
-                {...register("email", {
-                  required: "Email is required",
-                  pattern: {
-                    value: /^\S+@\S+$/i,
-                    message: "Invalid email address",
-                  },
-                })}
-              />
-              {errors.email && (
-                <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
-              )}
-            </div>
-
-            {/* Photo URL */}
-            <div>
-              <input
-                type="text"
-                placeholder="Photo URL"
-                className="w-full input input-bordered"
-                {...register("photo", { required: "Photo URL is required" })}
-              />
-              {errors.photo && (
-                <p className="text-red-500 text-sm mt-1">{errors.photo.message}</p>
-              )}
-            </div>
-
-            {/* Password */}
-            <div>
-              <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder="Password"
-                className="w-full input input-bordered"
-                {...register("password", {
-                  required: "Password is required",
-                  minLength: {
-                    value: 6,
-                    message: "Password must be at least 6 characters",
-                  },
+                className={`input input-bordered w-full focus:input-success ${errors.password && 'input-error'}`}
+                {...register("password", { 
+                  required: "Password required",
+                  minLength: { value: 6, message: "Min 6 characters" }
                 })}
               />
-              {errors.password && (
-                <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
-              )}
+              <button 
+                type="button" 
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-3 text-gray-400"
+              >
+                {showPassword ? <FaRegEyeSlash size={20} /> : <FaRegEye size={20} />}
+              </button>
+              {errors.password && <p className="text-red-500 text-xs">{errors.password.message}</p>}
             </div>
 
-            {/* Checkbox for authority */}
-            <label className="flex items-center gap-2 text-sm">
-              <input
-                type="checkbox"
-                className="checkbox checkbox-success"
-                {...register("admin")}
-              />
-              Register as Authority
-            </label>
-
-            {/* Submit Button */}
-            <button
-              type="submit"
-              className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-semibold mt-2"
+            <button 
+              disabled={loading} 
+              className="btn btn-success w-full text-white mt-4 font-bold text-lg"
             >
-              Create Account
+              {loading ? <span className="loading loading-spinner"></span> : "Create Account"}
             </button>
           </form>
 
-          {/* Divider */}
-          <div className="text-center my-4 text-sm text-gray-500">or continue with</div>
+          <div className="divider text-gray-400 text-xs mt-8">OR SIGN UP WITH</div>
 
-          {/* Social Login */}
-          <div className="flex justify-center gap-4">
-            <button className="btn btn-outline btn-circle">
-              <FaGoogle />
+          <div className="flex gap-4 mt-4">
+            <button onClick={handleGoogleLogin} className="btn btn-outline flex-1 gap-2 border-gray-200">
+              <FaGoogle className="text-red-500" /> Google
             </button>
-            <button className="btn btn-outline btn-circle">
-              <FaFacebookF />
+            <button className="btn btn-outline flex-1 gap-2 border-gray-200">
+              <FaFacebookF className="text-blue-600" /> Facebook
             </button>
           </div>
-
-          {/* Login Link */}
-          <p className="text-center mt-6 text-sm">
-            Already have an account?{" "}
-            <Link to="/login" className="text-green-600 font-semibold">
-              Login
-            </Link>
-          </p>
         </div>
       </div>
     </div>
